@@ -4,10 +4,19 @@ import "./Navbar.css";
 import Filter from "../filter/Filter";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const mode = 'light'; // Define the mode variable
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
+
+  const user = JSON.parse(localStorage.getItem("user"));
+console.log(user.user.email);
+
+const logout = () => {
+  localStorage.removeItem('user');
+  window.location.href = '/login';
+}
 
   return (
     <nav className="navbar">
@@ -28,8 +37,16 @@ const Navbar = () => {
           <a href="/home" className="box-link home">Home</a>
         </li>
         <li>
-          <a href="/Dashboard" className="box-link dashboard ">Shop</a>
+          <a href="/Dashboard" className="box-link dashboard ">Admin</a>
         </li>
+        
+
+          <div className="flow-root">
+                    <a onClick={logout} className="-m-2 block p-2 font-medium text-gray-900 cursor-pointer" style={{ color: mode === 'dark' ? 'white' : '', }}>
+                      Logout
+                    </a>
+                  </div>      
+        
         <li>
           <a href="/order" className="box-link order">order</a> {/* Added box-link */}
         </li>

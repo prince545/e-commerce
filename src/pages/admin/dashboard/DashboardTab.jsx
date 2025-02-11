@@ -263,7 +263,7 @@ function DashboardTab() {
                                                         1991818818
                                                     </td>
                                                     <td className="px-6 py-4 text-black " style={{ color: mode === 'dark' ? 'white' : '' }}>
-                                                       kkk@gmail.com
+                                                    kkakka@gmail.com
                                                     </td>
                                                     <td className="px-6 py-4 text-black " style={{ color: mode === 'dark' ? 'white' : '' }}>
                                                         12 Aug 2019
