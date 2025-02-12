@@ -20,6 +20,8 @@ import Productinfo from "./pages/productinfo/Productinfo";
 import Signup from "./pages/registration/Signup";
 import AddProduct from "./pages/admin/page/AddProduct";
 import UpdateProduct from "./pages/admin/page/UpdateProduct";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function App() {
@@ -55,6 +57,7 @@ function App() {
         <Route path="/*" element={<NoPage/>} />
         
       </Routes>
+      <ToastContainer/>
     </Router>
     </MyState>
   )
@@ -70,11 +73,3 @@ export const ProtectedRoute = ({ children }) => {
   return <Navigate to='/login' />
  }
 }
-// const ProtectedRouteForAdmin = ({ children }) => {
-//   const admin = JSON.parse(localStorage.getItem('user'))
-//   if (admin.user.email === 'kkakka@gmail.com' ){
-//     return children
-//   }else{
-//     return <Navigate to='/login' />
-//   }
-//   }

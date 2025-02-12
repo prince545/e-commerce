@@ -8,6 +8,8 @@ import { auth,fireDB } from '../../firebase/FirebaseConfig';
 import { Timestamp, addDoc, collection } from 'firebase/firestore';
 import Loader from '../../components/loader/Loader';
 
+
+
 function Signup() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");

@@ -51,6 +51,11 @@ function MyState(props) {
         try {
           await addDoc(productRef, products)
           toast.success("Product Add successfully")
+          toast.success("Product Updated successfully")
+            setTimeout(() => {
+                window.location.href = '/dashboard'
+            }, 800);
+
           getProductData()
           closeModal()
           setLoading(false)
@@ -93,7 +98,7 @@ function MyState(props) {
     
     
     return (
-        <myContext.Provider value={{ mode, toggleMode, loading, setLoading, addProduct }}>
+        <myContext.Provider value={{ mode, toggleMode, loading, setLoading, addProduct, products, setProducts, product }}>
             {props.children}
         </myContext.Provider>
     );
