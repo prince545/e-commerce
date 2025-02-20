@@ -65,6 +65,7 @@ function App() {
 
 export default App
 
+// eslint-disable-next-line react/prop-types
 export const ProtectedRoute = ({ children }) => {
  const user = localStorage.getItem('user')
  if (user){

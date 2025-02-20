@@ -2,7 +2,7 @@
 
 
 import { useDispatch, useSelector } from 'react-redux';
-import { addToCart,removeFromCart } from '../../redux/cartSlice';
+import { addToCart } from '../../redux/cartSlice';
 import ProductCard from '../../components/filter/productCard/ProductCard'
 import Track from '../../components/track/Track'
 

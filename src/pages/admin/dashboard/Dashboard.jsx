@@ -1,4 +1,5 @@
 /* eslint-disable react/no-unknown-property */
+// eslint-disable-next-line no-unused-vars
 import React, { useContext } from 'react'
 import {FaUserTie } from 'react-icons/fa';
 import myContext from '../../../context/data/myContext';

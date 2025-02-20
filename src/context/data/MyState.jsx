@@ -1,24 +1,139 @@
- // Make sure to import useState
+//  // Make sure to import useState
+// import { useState, useEffect } from "react";
+// import { toast } from "react-toastify";
+// import PropTypes from "prop-types";
+// import { Timestamp, collection, addDoc, onSnapshot, query, orderBy } from "firebase/firestore";
+// import { fireDB } from "../../firebase/FirebaseConfig"; // Adjust the path as necessary
+// import myContext from "./myContext";
+
+// function MyState(props) {
+//     const { mode, setMode } = useState('light'); // You might want to destructure the useState properly
+
+//     const toggleMode = () => {
+//         if (mode === 'light') {
+//             setMode('dark');
+//             document.body.style.backgroundColor = '#042743';
+//         } else {
+//             setMode('light');
+//             document.body.style.backgroundColor = 'white';
+//         }
+//     };
+//     const [loading, setLoading] = useState(false)
+//     const [products, setProducts] = useState({
+//         title: null,
+//         price: null,
+//         imageUrl: null,
+//         category: null,
+//         description: null,
+//         time: Timestamp.now(),
+//         date: new Date().toLocaleString(
+//           "en-US",
+//           {
+//             month: "short",
+//             day: "2-digit",
+//             year: "numeric",
+//           }
+//         )
+    
+//       })
+    
+//       // ********************** Add Product Section  **********************
+//       const closeModal = () => {
+//           // Add your modal closing logic here
+//       };
+  
+//       const addProduct = async () => {
+//         if (products.title == null || products.price == null || products.imageUrl == null || products.category == null || products.description == null) {
+//           return toast.error('Please fill all fields')
+//         }
+//         const productRef = collection(fireDB, "products")
+//         setLoading(true)
+//         try {
+//           await addDoc(productRef, products)
+//           toast.success("Product Add successfully")
+//           toast.success("Product Updated successfully")
+//             setTimeout(() => {
+//                 window.location.href = '/dashboard'
+//             }, 800);
+
+//           getProductData()
+//           closeModal()
+//           setLoading(false)
+//         } catch (error) {
+//           console.log(error)
+//           setLoading(false)
+//         }
+//         setProducts("")
+//       }
+    
+//       const [product, setProduct] = useState([]);
+    
+//       // ****** get product
+//       const getProductData = async () => {
+//         setLoading(true)
+//         try {
+//           const q = query(
+//             collection(fireDB, "products"),
+//             orderBy("time"),
+//             // limit(5)
+//           );
+//           const data = onSnapshot(q, (QuerySnapshot) => {
+//             let productsArray = [];
+//             QuerySnapshot.forEach((doc) => {
+//               productsArray.push({ ...doc.data(), id: doc.id });
+//             });
+//             setProduct(productsArray)
+//             setLoading(false);
+//           });
+//           return () => data;
+//         } catch (error) {
+//           console.log(error)
+//           setLoading(false)
+//         }
+//       }
+    
+//       useEffect(() => {
+//         getProductData();
+//       }, []);
+    
+    
+//     return (
+//         <myContext.Provider value={{ mode, toggleMode, loading, setLoading, addProduct, products, setProducts, product }}>
+//             {props.children}
+//         </myContext.Provider>
+//     );
+// }
+
+// MyState.propTypes = {
+//     children: PropTypes.node.isRequired, // Ensures children is passed
+// };
+
+// export default MyState;
+
 import { useState, useEffect } from "react";
-import { toast } from "react-toastify";
-import PropTypes from "prop-types";
-import { Timestamp, collection, addDoc, onSnapshot, query, orderBy } from "firebase/firestore";
-import { fireDB } from "../../firebase/FirebaseConfig"; // Adjust the path as necessary
-import myContext from "./myContext";
+
+import MyContext from './myContext'
+import PropTypes from 'prop-types';
+import { Timestamp, addDoc, collection, deleteDoc, doc, getDocs, onSnapshot, orderBy, query, setDoc } from 'firebase/firestore';
+import { toast } from 'react-toastify';
+import { fireDB } from "../../firebase/FirebaseConfig";
 
 function MyState(props) {
-    const { mode, setMode } = useState('light'); // You might want to destructure the useState properly
+    const [mode, setMode] = useState('light');
 
     const toggleMode = () => {
         if (mode === 'light') {
             setMode('dark');
-            document.body.style.backgroundColor = '#042743';
-        } else {
-            setMode('light');
-            document.body.style.backgroundColor = 'white';
+            document.body.style.backgroundColor = "rgb(17, 24, 39)"
         }
-    };
-    const [loading, setLoading] = useState(false)
+        else {
+            setMode('light');
+            document.body.style.backgroundColor = "white"
+        }
+    }
+
+    const [loading, setLoading] = useState(false);
+
     const [products, setProducts] = useState({
         title: null,
         price: null,
@@ -27,85 +142,178 @@ function MyState(props) {
         description: null,
         time: Timestamp.now(),
         date: new Date().toLocaleString(
-          "en-US",
-          {
-            month: "short",
-            day: "2-digit",
-            year: "numeric",
-          }
+            "en-US",
+            {
+                month: "short",
+                day: "2-digit",
+                year: "numeric",
+            }
         )
-    
-      })
-    
-      // ********************** Add Product Section  **********************
-      const closeModal = () => {
-          // Add your modal closing logic here
-      };
-  
-      const addProduct = async () => {
+    });
+
+    const addProduct = async () => {
         if (products.title == null || products.price == null || products.imageUrl == null || products.category == null || products.description == null) {
-          return toast.error('Please fill all fields')
+            return toast.error("all fields are required")
         }
-        const productRef = collection(fireDB, "products")
+
         setLoading(true)
+
         try {
-          await addDoc(productRef, products)
-          toast.success("Product Add successfully")
-          toast.success("Product Updated successfully")
+            const productRef = collection(fireDB, 'products');
+            await addDoc(productRef, products)
+            toast.success("Add product successfully");
             setTimeout(() => {
                 window.location.href = '/dashboard'
             }, 800);
-
-          getProductData()
-          closeModal()
-          setLoading(false)
+            getProductData();
+            setLoading(false)
         } catch (error) {
-          console.log(error)
-          setLoading(false)
+            console.log(error);
+            setLoading(false)
         }
-        setProducts("")
-      }
-    
-      const [product, setProduct] = useState([]);
-    
-      // ****** get product
-      const getProductData = async () => {
+        // setProducts("")
+
+
+    }
+
+    const [product, setProduct] = useState([]);
+
+    const getProductData = async () => {
+
+        setLoading(true)
+
+        try {
+            const q = query(
+                collection(fireDB, 'products'),
+                orderBy('time')
+            );
+
+            const data = onSnapshot(q, (QuerySnapshot) => {
+                let productArray = [];
+                QuerySnapshot.forEach((doc) => {
+                    productArray.push({ ...doc.data(), id: doc.id });
+                });
+                setProduct(productArray);
+                setLoading(false)
+            });
+
+            return () => data;
+
+        } catch (error) {
+            console.log(error)
+            setLoading(false)
+        }
+
+    }
+
+    useEffect(() => {
+        getProductData();
+    }, []);
+
+    // update product function
+
+    const edithandle = (item) => {
+        setProducts(item)
+    }
+
+    const updateProduct = async () => {
         setLoading(true)
         try {
-          const q = query(
-            collection(fireDB, "products"),
-            orderBy("time"),
-            // limit(5)
-          );
-          const data = onSnapshot(q, (QuerySnapshot) => {
-            let productsArray = [];
-            QuerySnapshot.forEach((doc) => {
-              productsArray.push({ ...doc.data(), id: doc.id });
-            });
-            setProduct(productsArray)
-            setLoading(false);
-          });
-          return () => data;
-        } catch (error) {
-          console.log(error)
-          setLoading(false)
-        }
-      }
-    
-      useEffect(() => {
-        getProductData();
-      }, []);
-    
-    
-    return (
-        <myContext.Provider value={{ mode, toggleMode, loading, setLoading, addProduct, products, setProducts, product }}>
-            {props.children}
-        </myContext.Provider>
-    );
-}
 
+            await setDoc(doc(fireDB, 'products', products.id), products)
+            toast.success("Product Updated successfully")
+            setTimeout(() => {
+                window.location.href = '/dashboard'
+            }, 800);
+            getProductData();
+            setLoading(false)
+
+        } catch (error) {
+            console.log(error)
+            setLoading(false)
+        }
+    }
+
+    // delete product
+
+    const deleteProduct = async (item) => {
+        setLoading(true)
+        try {
+            await deleteDoc(doc(fireDB, 'products', item.id))
+            toast.success('Product Deleted successfully')
+            getProductData();
+            setLoading(false)
+        } catch (error) {
+            console.log(error)
+            setLoading(false)
+        }
+    }
+
+
+    const [order, setOrder] = useState([]);
+
+    const getOrderData = async () => {
+        setLoading(true)
+        try {
+            const result = await getDocs(collection(fireDB, "order"))
+            const ordersArray = [];
+            result.forEach((doc) => {
+                ordersArray.push(doc.data());
+                setLoading(false)
+            });
+            setOrder(ordersArray);
+            console.log(ordersArray)
+            setLoading(false);
+        } catch (error) {
+            console.log(error)
+            setLoading(false)
+        }
+    }
+
+    const [user, setUser] = useState([]);
+
+    const getUserData = async () => {
+        setLoading(true)
+        try {
+            const result = await getDocs(collection(fireDB, "users"))
+            const usersArray = [];
+            result.forEach((doc) => {
+                usersArray.push(doc.data());
+                setLoading(false)
+            });
+            setUser(usersArray);
+            console.log(usersArray)
+            setLoading(false);
+        } catch (error) {
+            console.log(error)
+            setLoading(false)
+        }
+    }
+
+    useEffect(() => {
+        getOrderData();
+        getUserData();
+    }, []);
+
+    const [searchkey, setSearchkey] = useState('')
+    const [filterType, setFilterType] = useState('')
+    const [filterPrice, setFilterPrice] = useState('')
+
+    return (
+        <MyContext.Provider value={{
+            mode, toggleMode, loading, setLoading,
+            products, setProducts, addProduct, product,
+            edithandle, updateProduct, deleteProduct, order,
+            user, searchkey, setSearchkey,filterType,setFilterType,
+            filterPrice,setFilterPrice
+        }}>
+            {props.children}
+        </MyContext.Provider>
+    )
+}
 MyState.propTypes = {
-    children: PropTypes.node.isRequired, // Ensures children is passed
+    children: PropTypes.node.isRequired,
 };
 
-export default MyState;
+
+export default MyState
