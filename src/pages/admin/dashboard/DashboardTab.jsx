@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom';
 
 function DashboardTab() {
   const context = useContext(myContext);
-  const { mode, product, edithandle, deleteProduct, order, user } = context;
+  const { mode, product, edithandle, deleteProduct, order } = context;
 
   const [isOpen, setIsOpen] = useState(false);
 
