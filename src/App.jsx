@@ -14,7 +14,7 @@ import Order from "./pages/order/Order";
 import Cart from "./pages/cart/Cart";
 import Dashboard from "./pages/admin/dashboard/Dashboard";
 import NoPage from "./pages/nopage/NoPage";
-import MyState from "./context/data/myState"; // Update the path to the correct location of MyState
+import MyState from "./context/data/myState";
 import Login from "./pages/registration/Login";
 import Productinfo from "./pages/productinfo/Productinfo";
 import Signup from "./pages/registration/Signup";
